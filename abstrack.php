@@ -1,6 +1,6 @@
 <?php 
  
- class Produk {
+  abstract class Produk {
     private $typemotor, 
             $jumlahroda, 
             $jenismotor,
@@ -73,19 +73,26 @@
 
 
             public function getLabel() {
-                return "$this->typemotor, $this->jumlahroda, $this->jenismotor, $this->motorkeluaran";
+                return "$this->typemotor, $this->jumlahroda, $this->jenismotor, $this->motorkeluaran, $this->jumlahunit, $this->usia";
             }  
-            public function getInfoLengkap () {
-                $str = "{$this->type} : | {$this->getLabel()}"; 
 
-                if ($this->type == "motor") {
-                    $str .= " - {$this->jumlahunit} Unit.";
-                }
-                else if ( $this->type == "manusia") {
-                    $str .= " - {$this->usia} Tahun.";
-                }
-                return $str;
+            abstract public function getInfoLengkap();
+
+            public function getInfo() {
+                 $str = "{$this->type} : | {$this->getLabel()}"; 
+                  return $str;
             }
+            // public function getInfoLengkap () {
+            //     $str = "{$this->type} : | {$this->getLabel()}"; 
+
+            //     if ($this->type == "motor") {
+            //         $str .= " - {$this->jumlahunit} Unit.";
+            //     }
+            //     else if ( $this->type == "manusia") {
+            //         $str .= " - {$this->usia} Tahun.";
+            //     }
+            //     return $str;
+            // }
         }
         class motor extends produk {
             public $jumlahunit; 
@@ -97,8 +104,8 @@
                    $this ->jumlahunit = $jumlahunit; 
                 }
 
-            public function getInfoLengkap(){
-                $str = "Otomotif : " .parent::getInfolengkap() . "";
+            public function getInfoLengkap() {
+                $str = "Otomotif : " . $this->getInfo() . "";
                 return $str;
             }
             //public function gettype() {
@@ -113,12 +120,11 @@
 
             public function __construct( $typemotor = "typemotor", $jumlahroda = "jumlahroda", $jenismotor = "jenismotor", $motorkeluaran = "motorkeluaran" , $jumlahunit = 0, $usia = 0 , $type = "type") {
 
-                parent::__construct ( $typemotor, $jumlahroda, $jenismotor, $motorkeluaran, $jumlahunit, $usia, $type); 
+                parent::__construct ( $typemotor, $jumlahroda, $jenismotor, $motorkeluaran, $jumlahunit, $usia, $type);
+            }
 
-                   //$this ->saya= $saya; 
-                }
             public function getInfoLengkap() {
-                $str = "Makhluk hidup : " .parent::getInfoLengkap() . " - {$this -> usia}";
+                $str = "Makhluk hidup : " . $this->getInfo() . "";
                 return $str;
             }
         }
@@ -136,16 +142,16 @@
          $str = "DAFTAR PRODUK : <br>";
             foreach ( $this->daftarProduk as $p) {
                 $str .= "- {$p->getInfoLengkap()} <br>";
-         }
+            }
             return $str;
-             }
-                }
+        }
+    }
     
 
   
         $produk1 = new motor("vario", "2", "matic", "2015", 1000, 0, "motor");
-        $produk2 = new Produk("mio", "4", "matic", "2000", 1000, 0 ,"motor");
-        $produk3 = new Produk("zaky", "1", "laki-laki", "2005", 0, 21, "manusia");
+        $produk2 = new motor("mio", "4", "matic", "2000", 1000, 0 ,"motor");
+        $produk3 = new manusia("zaky", "1", "laki-laki", "2005", 0, 21, "manusia");
          
         $CetakProduk = new cetakInfoProduk();
         $CetakProduk->tambahProduk ( $produk1 );
